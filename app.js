@@ -1,9 +1,26 @@
 const express = require('express')
 const Playlist = require('./models/playlist')
+const Sequelize = require('sequelize')
+
+const {Op} = Sequelize
+
 const app = express()
 
 app.get('/api/playlists', (request, response) => {
-    Playlist.findAll().then((playlists) => {
+    let filter = {}
+    let {q} = request.query
+
+    if(q) {
+        filter = {
+            where: {
+                name: {
+                    [Op.like] : `${q}%`
+                }        
+            }
+        }
+    }
+
+    Playlist.findAll(filter).then((playlists) => {
         response.json(playlists)
     })
 });
