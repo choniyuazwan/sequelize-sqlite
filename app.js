@@ -144,6 +144,15 @@ app.get('/api/albums/:id', (request, response) => {
     })
 });
 
+app.get('/api/albums', (request, response) => {
+    Album.findAll({
+        include: [Artist]
+    }).then((playlists) => {
+        response.json(playlists)
+    })
+});
+
+
 app.listen(8000, () => {
     console.log('App listening on port 8000!');
 });
